@@ -2,13 +2,31 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { ExternalLink, Github, Calendar, Code, Zap, Brain, Globe } from "lucide-react"
+import { ExternalLink, Github, Calendar, Code, Zap } from "lucide-react"
 import { Information } from "../../info/info"
+
+// Define the project type from your Information shape
+interface Project {
+  id: string | number
+  title: string
+  subtitle: string
+  description: string
+  longDescription: string
+  date: string
+  icon: React.ComponentType<{ className?: string }>
+  bgGradient: string
+  color: string
+  features: string[]
+  technologies: string[]
+  liveUrl?: string
+  githubUrl: string
+}
 
 export default function ProjectsPage() {
   const [animatedProjects, setAnimatedProjects] = useState<string[]>([])
 
-  const projectsData = Information.projects
+  const projectsData: Project[] = Information.projects
+
   // Animate projects on mount
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -16,7 +34,7 @@ export default function ProjectsPage() {
     }, 800)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [projectsData])
 
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
@@ -63,6 +81,7 @@ export default function ProjectsPage() {
           </div>
         </div>
       </motion.header>
+
       {/* Projects Grid */}
       <section className="relative z-10 container mx-auto px-6 py-8">
         <div className="max-w-7xl mx-auto">

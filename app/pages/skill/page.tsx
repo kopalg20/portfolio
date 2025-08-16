@@ -1,18 +1,30 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
-import {Code2, BookOpen, Star, Zap } from "lucide-react"
+import { Code2, BookOpen, Star, Zap } from "lucide-react"
 import { Information } from "../../info/info"
+
+// --- Types for Information.skills ---
+type Skill = {
+  name: string
+  level: number
+}
+
+type SkillCategory = {
+  category: string
+  color: string
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+  skills: Skill[]
+}
 
 export default function SkillsPage() {
   const router = useRouter()
   const [animatedSkills, setAnimatedSkills] = useState<string[]>([])
 
-  const skillsData = Information.skills
+  const skillsData: SkillCategory[] = Information.skills
 
   // Animate skill bars on mount
   useEffect(() => {
@@ -24,12 +36,10 @@ export default function SkillsPage() {
     }, 500)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [skillsData])
 
   return (
-    <main
-      className="min-h-screen bg-gray-900 text-white relative overflow-hidden"
-    >
+    <main className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black" />
 

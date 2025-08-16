@@ -2,23 +2,40 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Calendar, MapPin, Users, Award, Target, Handshake} from "lucide-react"
+import { Calendar, MapPin, Users, Target, Handshake } from "lucide-react"
 import { Information } from "../../info/info"
+
+// ✅ Define Role type (matches your data shape)
+type Role = {
+  id: string | number
+  position: string
+  organization: string
+  status: string
+  type: string
+  duration: string
+  location: string
+  description: string
+  responsibilities: string[]
+  skills: string[]
+  icon: React.ComponentType<any>
+  color: string
+  bgGradient: string
+}
 
 export default function LeadershipPage() {
   const [animatedRoles, setAnimatedRoles] = useState<string[]>([])
 
-  const leadershipData = Information.roles
-
+  // ✅ Leadership data typed correctly
+  const leadershipData: Role[] = Information.roles
 
   // Animate roles on mount
   useEffect(() => {
     const timer = setTimeout(() => {
-      setAnimatedRoles(leadershipData.map((role) => role.id.toString()))
+      setAnimatedRoles(leadershipData.map((role: Role) => role.id.toString()))
     }, 800)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [leadershipData])
 
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
@@ -61,7 +78,9 @@ export default function LeadershipPage() {
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-4">
               Leadership & Roles
             </h1>
-            <p className="text-gray-400 text-lg">My contributions to organizations and community initiatives</p>
+            <p className="text-gray-400 text-lg">
+              My contributions to organizations and community initiatives
+            </p>
           </div>
         </div>
       </motion.header>
@@ -69,7 +88,7 @@ export default function LeadershipPage() {
       {/* Leadership Timeline */}
       <section className="relative z-10 container mx-auto px-6 py-8">
         <div className="max-w-6xl mx-auto">
-          {leadershipData.map((role, index) => {
+          {leadershipData.map((role: Role, index: number) => {
             const Icon = role.icon
             const isAnimated = animatedRoles.includes(role.id.toString())
 
@@ -87,7 +106,11 @@ export default function LeadershipPage() {
                 )}
 
                 {/* Role Card */}
-                <div className={`relative ${index % 2 === 0 ? "lg:pr-1/2" : "lg:pl-1/2 lg:ml-auto"}`}>
+                <div
+                  className={`relative ${
+                    index % 2 === 0 ? "lg:pr-1/2" : "lg:pl-1/2 lg:ml-auto"
+                  }`}
+                >
                   <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
                     className={`bg-gradient-to-br ${role.bgGradient} backdrop-blur-sm border border-gray-700 rounded-2xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-300`}
@@ -95,12 +118,16 @@ export default function LeadershipPage() {
                     {/* Header */}
                     <div className="flex items-start justify-between mb-6">
                       <div className="flex items-center space-x-4">
-                        <div className={`p-3 rounded-full bg-gradient-to-r ${role.color}`}>
+                        <div
+                          className={`p-3 rounded-full bg-gradient-to-r ${role.color}`}
+                        >
                           <Icon className="w-6 h-6 text-white" />
                         </div>
                         <div>
                           <div className="flex items-center space-x-3 mb-2">
-                            <h3 className="text-2xl font-bold text-white">{role.position}</h3>
+                            <h3 className="text-2xl font-bold text-white">
+                              {role.position}
+                            </h3>
                             <div className="px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">
                               {role.status}
                             </div>
@@ -131,7 +158,9 @@ export default function LeadershipPage() {
                     </div>
 
                     {/* Description */}
-                    <p className="text-gray-300 text-lg mb-6 leading-relaxed">{role.description}</p>
+                    <p className="text-gray-300 text-lg mb-6 leading-relaxed">
+                      {role.description}
+                    </p>
 
                     {/* Responsibilities */}
                     <div className="mb-6">
@@ -140,26 +169,31 @@ export default function LeadershipPage() {
                         Key Responsibilities
                       </h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {role.responsibilities.map((responsibility, idx) => (
-                          <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{
-                              duration: 0.5,
-                              delay: 0.8 + index * 0.3 + idx * 0.1 + 0.5,
-                            }}
-                            className="text-gray-300 flex items-start space-x-3 leading-relaxed text-sm"
-                          >
+                        {role.responsibilities.map(
+                          (responsibility: string, idx: number) => (
                             <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: isAnimated ? 1 : 0 }}
-                              transition={{ duration: 0.3, delay: 1.2 + index * 0.3 + idx * 0.1 }}
-                              className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"
-                            />
-                            <span>{responsibility}</span>
-                          </motion.div>
-                        ))}
+                              key={idx}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{
+                                duration: 0.5,
+                                delay: 0.8 + index * 0.3 + idx * 0.1 + 0.5,
+                              }}
+                              className="text-gray-300 flex items-start space-x-3 leading-relaxed text-sm"
+                            >
+                              <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: isAnimated ? 1 : 0 }}
+                                transition={{
+                                  duration: 0.3,
+                                  delay: 1.2 + index * 0.3 + idx * 0.1,
+                                }}
+                                className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"
+                              />
+                              <span>{responsibility}</span>
+                            </motion.div>
+                          )
+                        )}
                       </div>
                     </div>
 
@@ -170,7 +204,7 @@ export default function LeadershipPage() {
                         Skills Developed
                       </h4>
                       <div className="flex flex-wrap gap-2">
-                        {role.skills.map((skill, idx) => (
+                        {role.skills.map((skill: string, idx: number) => (
                           <motion.div
                             key={skill}
                             initial={{ opacity: 0, scale: 0.8 }}

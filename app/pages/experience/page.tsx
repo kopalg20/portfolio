@@ -5,10 +5,28 @@ import { motion } from "framer-motion"
 import { Calendar, MapPin, Building, Code, Brain, CheckCircle, TrendingUp, FileCheck } from "lucide-react"
 import { Information } from "../../info/info"
 
+// ✅ Define Experience type so TypeScript knows what `exp` is
+type Experience = {
+  id: string
+  role: string
+  company: string
+  type: string
+  duration: string
+  location: string
+  description: string
+  achievements: string[]
+  technologies: string[]
+  icon: React.ComponentType<any>
+  color: string
+  bgPattern: string
+  certificate?: string
+}
+
 export default function ExperiencePage() {
   const [animatedItems, setAnimatedItems] = useState<string[]>([])
 
-  const experienceData = Information.experiences
+  // ✅ Cast Information.experiences as Experience[]
+  const experienceData: Experience[] = Information.experiences
 
   const stats = [
     { label: "Total Experience", value: "4+ Months", icon: Calendar },
@@ -20,12 +38,15 @@ export default function ExperiencePage() {
   // Animate achievements on mount
   useEffect(() => {
     const timer = setTimeout(() => {
-      const allAchievements = experienceData.flatMap((exp) => exp.achievements.map((_, idx) => `${exp.id}-${idx}`))
+      // ✅ `exp` now correctly typed as Experience
+      const allAchievements = experienceData.flatMap((exp) =>
+        exp.achievements.map((_, idx) => `${exp.id}-${idx}`)
+      )
       setAnimatedItems(allAchievements)
     }, 800)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [experienceData])
 
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
