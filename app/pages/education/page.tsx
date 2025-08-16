@@ -2,16 +2,28 @@
 
 import type React from "react"
 
-import { useState } from "react"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, ArrowRight,  Calendar, MapPin } from "lucide-react"
+import { Calendar, MapPin } from "lucide-react"
 import { Information } from "../../info/info"
+
+// Define Education type
+interface Education {
+  id: number
+  level: string
+  institution: string
+  degree: string
+  duration: string
+  location: string
+  grade: string
+  color: string
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+}
 
 export default function EducationPage() {
   const router = useRouter()
 
-  const educationData = Information.educationDetails
+  const educationData: Education[] = Information.educationDetails
 
   return (
     <main
