@@ -1,20 +1,35 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import {
   Award,
   Star,
-  BookOpen,
   Calendar,
   ExternalLink,
 } from "lucide-react"
 import { Information } from "../../info/info"
 
+// ✅ Define the Achievement type
+interface Achievement {
+  id: number
+  title: string
+  subtitle: string
+  date: string
+  organization: string
+  description: string
+  details: string[]
+  icon: React.ComponentType<{ className?: string }>
+  color: string
+  bgGradient: string
+  certificateUrl?: string
+}
+
 export default function AchievementsPage() {
   const [animatedAchievements, setAnimatedAchievements] = useState<string[]>([])
 
-  const achievementsData = Information.achievements
+  // ✅ Tell TS what type this is
+  const achievementsData: Achievement[] = Information.achievements
 
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
@@ -141,22 +156,23 @@ export default function AchievementsPage() {
                         ))}
                       </ul>
                     </div>
+
                     {/* Certificate Link */}
-                    {achievement.id === 3 && (
-                        <div className="pt-4 border-t border-gray-700">
-                            <motion.a
-                            href={achievement.certificateUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 w-fit"
-                            >
-                            <ExternalLink className="w-4 h-4" />
-                            <span>View Certificate</span>
-                            </motion.a>
-                        </div>
-                        )}
+                    {achievement.id === 3 && achievement.certificateUrl && (
+                      <div className="pt-4 border-t border-gray-700">
+                        <motion.a
+                          href={achievement.certificateUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 w-fit"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          <span>View Certificate</span>
+                        </motion.a>
+                      </div>
+                    )}
                   </motion.div>
                 </motion.div>
               )
